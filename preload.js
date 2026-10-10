@@ -1,0 +1,27 @@
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  toggleFullScreen: () => ipcRenderer.invoke('toggle-fullscreen'),
+  minimizeWindow: () => ipcRenderer.invoke('minimize-window'),
+  closeWindow: () => ipcRenderer.invoke('close-window'),
+  setCompactMode: (compact) => ipcRenderer.invoke('set-compact-mode', compact),
+  maximizeWindow: () => ipcRenderer.invoke('maximize-window'),
+  setAlwaysOnTop: (value) => ipcRenderer.invoke('set-always-on-top', value),
+  onFullScreenChange:  (cb) => ipcRenderer.on('fullscreen-changed',  (_e, v) => cb(v)),
+  onMaximizeChange:    (cb) => ipcRenderer.on('maximize-changed',    (_e, v) => cb(v)),
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
+  getTelemetryInfo: () => ipcRenderer.invoke('telemetry-get-info'),
+  sendTelemetry: (payload) => ipcRenderer.invoke('telemetry-send', payload),
+  getLaunchAtLogin: () => ipcRenderer.invoke('get-launch-at-login'),
+  setLaunchAtLogin: (value) => ipcRenderer.invoke('set-launch-at-login', value),
+  showNotification: (payload) => ipcRenderer.invoke('show-notification', payload),
+  setProgress: (fraction) => ipcRenderer.invoke('set-progress', fraction),
+  setTrayState: (payload) => ipcRenderer.invoke('set-tray-state', payload),
+  onTrayToggleTimer: (cb) => ipcRenderer.on('tray-toggle-timer', () => cb()),
+  updateSupported: () => ipcRenderer.invoke('update-supported'),
+  checkForUpdate: () => ipcRenderer.invoke('check-for-update'),
+  downloadUpdate: () => ipcRenderer.invoke('download-update'),
+  installUpdate: () => ipcRenderer.invoke('install-update'),
+  onUpdateStatus: (cb) => ipcRenderer.on('update-status', (_e, v) => cb(v)),
+});

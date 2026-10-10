@@ -1,0 +1,94 @@
+{
+  "name": "pomoro",
+  "version": "1.0.0",
+  "description": "A single-page focus timer built with vanilla JavaScript, HTML, and CSS — no frameworks, no build tools.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis",
+    "dist:fast": "electron-builder --win nsis --config.compression=store --config.win.signAndEditExecutable=false",
+    "dist:store": "electron-builder --win appx",
+    "release":"electron-builder --win nsis --publish always",
+    "dist:mac": "electron-builder --mac --config.directories.output=dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfabdkia-dev/Pomoro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sfabdkia-dev/Pomoro/issues"
+  },
+  "homepage": "https://github.com/sfabdkia-dev/Pomoro#readme",
+  "devDependencies": {
+    "electron": "^43.0.0",
+    "electron-builder": "^26.15.6"
+  },
+  "build": {
+    "appId": "com.sfabdkia.pomoro",
+    "productName": "Pomoro",
+    "npmRebuild": false,
+    "files": [
+      "index.html",
+      "script.js",
+      "styles.css",
+      "main.js",
+      "preload.js",
+      "telemetry.js",
+      "assets/**/*"
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "sfabdkia-dev",
+      "repo": "Pomoro"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/Icon.ico"
+    },
+    "appx": {
+      "identityName": "SaeedAB.Pomoro",
+      "publisher": "CN=A1BA4E25-5E43-41BF-BD01-8176E793144E",
+      "publisherDisplayName": "SaeedAB",
+      "displayName": "Pomoro",
+      "applicationId": "Pomoro",
+      "backgroundColor": "#1e1e2e",
+      "languages": ["en-US"]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "runAfterFinish": true
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.productivity",
+      "icon": "assets/App icon.png"
+    },
+    "directories": {
+      "output": "C:\\Users\\saeed\\pomo-build"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9"
+  }
+}

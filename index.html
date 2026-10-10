@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomoro</title>
+  <link rel="icon" href="assets/Icon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="title-bar" id="titleBar">
+    <span class="title-bar-label">Pomoro</span>
+    <div class="title-bar-controls">
+      <button id="minimizeBtn" class="title-bar-btn" type="button" aria-label="Minimize">─</button>
+      <button id="maximizeBtn" class="title-bar-btn" type="button" aria-label="Maximize">□</button>
+      <button id="closeBtn" class="title-bar-btn title-bar-btn-close" type="button" aria-label="Close">✕</button>
+    </div>
+  </div>
+  <div class="side-rail">
+    <button id="summaryRailBtn" class="rail-btn" title="Summary">📊</button>
+  </div>
+  <div class="right-rail">
+    <button id="logRailBtn" class="rail-btn" title="Log &amp; Tasks">📋</button>
+  </div>
+  <main class="app">
+    <aside class="summary-sidebar" id="summarySidebar" aria-hidden="true">
+      <div class="summary-shell">
+        <header class="summary-sidebar-header">
+          <h2>Summary</h2>
+        </header>
+        <div class="compact-heatmap-panel" id="compactHeatmapPanel"></div>
+        <div class="stats-box" id="statsBox">
+          <div class="stats-row"><span class="stats-label">Today</span><span class="stats-value" id="statToday">0h 0m</span></div>
+          <div class="stats-row"><span class="stats-label">This week</span><span class="stats-value" id="statWeek">0h 0m</span></div>
+          <div class="stats-row"><span class="stats-label">Avg / day (7d)</span><span class="stats-value" id="statAvg7">0m</span></div>
+          <div class="stats-row"><span class="stats-label">Avg / day (30d)</span><span class="stats-value" id="statAvg30">0m</span></div>
+          <div class="stats-row"><span class="stats-label">vs Yesterday</span><span class="stats-value" id="statVsYesterday">—</span></div>
+          <div class="stats-row stats-goal-row" id="goalRow" title="Click to set your daily goal"><span class="stats-label">Goal progress</span><span class="stats-value" id="statGoalProgress">0%</span></div>
+          <div class="goal-bar" id="goalBar" role="progressbar" title="Click to set your daily goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="goal-bar-fill" id="goalBarFill"></div></div>
+          <div class="stats-row"><span class="stats-label">Current streak</span><span class="stats-value" id="statStreak">0 days</span></div>
+          <div class="stats-row"><span class="stats-label">Longest streak</span><span class="stats-value" id="statLongestStreak">0 days</span></div>
+        </div>
+        <a class="kofi-icon-link" data-kofi href="https://ko-fi.com/saeedab" target="_blank" rel="noopener noreferrer" title="Support me on Ko-fi" aria-label="Support me on Ko-fi">☕</a>
+        <button type="button" class="kofi-icon-link share-app-btn" id="shareAppBtn" title="Copy a link to share this app" aria-label="Copy a link to share this app">🔗</button>
+        <button type="button" class="kofi-icon-link share-app-btn help-circle-btn" id="shortcutsHelpBtn" title="Keyboard shortcuts (?)" aria-label="Show keyboard shortcuts">?</button>
+      </div>
+    </aside>
+
+
+    <aside class="planner-overlay" id="plannerOverlay" aria-hidden="true">
+      <div class="planner-shell">
+        <header class="planner-header">
+          <h2>Task Planner</h2>
+          <div class="planner-header-actions">
+            <div class="planner-view-switch" id="plannerViewSwitch" role="group" aria-label="Planner view">
+              <button type="button" class="planner-view-opt" data-view="board" title="Board view">▦ Board</button>
+              <button type="button" class="planner-view-opt" data-view="list" title="Compact list view">☰ List</button>
+              <button type="button" class="planner-view-opt" data-view="table" title="Editable table view">▤ Table</button>
+            </div>
+            <button id="closePlannerBtn" class="planner-close-btn" aria-label="Close planner">✕</button>
+          </div>
+        </header>
+        <div class="planner-board" id="plannerBoard"></div>
+      </div>
+    </aside>
+
+    <section class="timer-panel">
+      <div class="top-actions">
+        <button id="settingsBtn" class="ghost-btn" aria-label="Open settings">⚙️ Settings</button>
+        <button id="muteSoundBtn" class="ghost-btn icon-btn" type="button" aria-label="Toggle sound" title="Toggle sound"><img src="assets/icons/Mute_button.png" alt="" aria-hidden="true" class="btn-img-icon"></button>
+        <button id="compactModeBtn" class="ghost-btn icon-btn" type="button" title="Compact mode" aria-label="Compact mode"><img src="assets/icons/Compact_button.png" alt="" aria-hidden="true" class="btn-img-icon"></button>
+        <button id="fullscreenBtn" class="ghost-btn icon-btn" type="button" aria-label="Toggle full screen" title="Toggle full screen"><img src="assets/icons/Fullscreen_button.png" alt="" aria-hidden="true" class="btn-img-icon"></button>
+        <button id="themeToggleBtn" class="ghost-btn icon-btn" aria-label="Toggle dark mode"><img src="assets/icons/Dark mode.png" alt="" aria-hidden="true" class="btn-img-icon"></button>
+      </div>
+      <h1 class="timer-title">Focus Timer</h1>
+      <div class="focus-card" id="focusCard">🎯 No task selected yet</div>
+      <div id="compactTaskDisplay" class="compact-task-display"></div>
+
+      <div class="timer-visual-group">
+        <div class="timer-blur-backdrop" aria-hidden="true"></div>
+        <p id="modeLabel" class="mode-label">Work Session (50 min)</p>
+        <div id="timerArea" class="timer-area" role="button" tabindex="0" title="Click to toggle analog / digital">
+          <svg id="progressRing" class="progress-ring" viewBox="0 0 240 240" aria-hidden="true">
+            <circle class="progress-ring-track" cx="120" cy="120" r="113"/>
+            <circle id="progressRingFill" class="progress-ring-fill" cx="120" cy="120" r="113"/>
+          </svg>
+          <div id="timerDisplay" class="timer" aria-live="polite">50:00</div>
+          <canvas id="analogClock" class="analog-clock" aria-hidden="true"></canvas>
+          <div id="breakIcon" class="break-icon" aria-hidden="true"><img src="assets/icons/cofee_cup_icon.png" alt="" /></div>
+        </div>
+        <p id="statusMessage" class="status-message"></p>
+      </div>
+
+      <div class="controls">
+        <button id="startPauseBtn" class="btn primary"><span class="btn-text">Start</span><span class="btn-icon" aria-hidden="true">▶</span></button>
+        <button id="stopBtn" class="btn danger"><span class="btn-text">Stop</span><span class="btn-icon" aria-hidden="true">⏹</span></button>
+      </div>
+      <div class="session-picker">
+        <h2>Session Presets</h2>
+        <div class="preset-buttons" role="radiogroup" aria-label="Pomodoro presets">
+          <button class="preset active" data-work="50" data-break="10" aria-pressed="true">50 / 10</button>
+          <button class="preset" data-work="25" data-break="5" aria-pressed="false">25 / 5</button>
+          <button class="preset" data-work="90" data-break="20" aria-pressed="false">90 / 20</button>
+          <button class="preset" id="customPresetChip" type="button" aria-pressed="false">Custom</button>
+        </div>
+      </div>
+
+    </section>
+
+    <aside class="log-panel">
+        <div class="log-panel-tabs">
+          <button class="log-tab" data-tab="log">Activity Log</button>
+          <button class="log-tab" data-tab="calendar">Calendar</button>
+          <button class="log-tab active" data-tab="tasks">Tasks</button>
+        </div>
+        <div id="tasksTabContent">
+          <section class="task-panel" id="taskPanel">
+            <h3>Task Planner</h3>
+            <div class="task-create">
+              <input id="taskInput" type="text" maxlength="100" placeholder="Write a task..." />
+              <button id="addTaskBtn" class="btn secondary">Add Task</button>
+            </div>
+            <ul id="taskList" class="task-list"></ul>
+            <button id="completedTasksBtn" class="btn secondary completed-tasks-open-btn" type="button">Task Planner</button>
+          </section>
+        </div>
+        <div id="logTabContent" class="hidden">
+          <p class="hint" style="margin:0 0 .3rem">Completed active focus durations:</p>
+          <ul id="activityLog" class="log-list"></ul>
+          <p id="emptyState" class="empty-state">No completed pomodoro sessions yet.</p>
+          <div class="totals">
+            <p>Total Focused Time</p>
+            <strong id="totalFocusedTime">00h 00m 00s</strong>
+          </div>
+          <div class="log-add-section">
+            <button id="addLogEntryBtn" class="ghost-btn add-log-btn" type="button" title="Add manual entry">＋ Add entry</button>
+            <div id="manualEntryForm" class="manual-entry-form hidden">
+              <div class="manual-fields">
+                <label class="manual-field">Date<input id="manualDate" type="date" /></label>
+                <label class="manual-field">Time<input id="manualTime" type="time" /></label>
+                <label class="manual-field">Duration
+                  <div class="manual-dur-row">
+                    <input id="manualDuration" type="number" min="1" max="480" placeholder="min" />
+                    <span class="log-edit-unit">min</span>
+                  </div>
+                </label>
+              </div>
+              <div class="manual-form-btns">
+                <button id="manualCancelBtn" class="btn secondary" type="button">Cancel</button>
+                <button id="manualAddBtn" class="btn primary" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="calendarTabContent" class="hidden">
+          <div class="cal-box">
+            <div class="cal-nav">
+              <button id="calPrevBtn" class="ghost-btn cal-nav-btn" type="button">‹</button>
+              <span id="calMonthLabel" class="cal-month-label"></span>
+              <button id="calNextBtn" class="ghost-btn cal-nav-btn" type="button">›</button>
+            </div>
+            <div class="cal-weekdays">
+              <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+          <div class="cal-deadline-list" id="calDeadlineList"></div>
+        </div>
+    </aside>
+  </main>
+
+
+  <div id="customTimeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="customTimeTitle">
+    <div class="modal-content">
+      <button id="closeCustomTimeBtn" class="modal-close-btn" aria-label="Close custom session">✕</button>
+      <h2 id="customTimeTitle">Custom Session</h2>
+      <label class="modal-field">Focus (min)
+        <input id="customWork" type="number" min="1" max="1439" value="40" />
+      </label>
+      <label class="modal-field">Break (min)
+        <input id="customBreak" type="number" min="1" max="1439" value="8" />
+      </label>
+      <div class="modal-actions">
+        <button id="applyCustomBtn" class="btn secondary" type="button">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-content">
+      <div class="settings-modal-header" id="settingsModalHeader">
+        <h2 id="settingsTitle">Settings</h2>
+        <button id="closeSettingsBtn" class="planner-close-btn" aria-label="Close settings">✕</button>
+      </div>
+      <div class="modal-content-body">
+      <details class="settings-details" open>
+      <summary class="settings-section-heading" style="border-top:none;padding-top:0;margin-top:.25rem">Appearance</summary>
+      <div class="modal-field">
+        <span>Choose background</span>
+        <div id="preloadedThumbs" class="thumb-grid"></div>
+      </div>
+      <div class="modal-field">
+        <div class="slider-row">
+          <label for="bgOpacity" class="slider-label">Background opacity</label>
+          <input id="bgOpacity" type="range" min="0" max="100" value="100" />
+          <span id="opacityLabel" class="slider-value">100%</span>
+        </div>
+        <div class="slider-row">
+          <label for="columnOpacity" class="slider-label">Panel transparency</label>
+          <input id="columnOpacity" type="range" min="0" max="100" value="100" />
+          <span id="columnOpacityLabel" class="slider-value">100%</span>
+        </div>
+      </div>
+      <h2 class="settings-section-heading">UI Color</h2>
+      <div class="modal-field">
+        <div id="uiThemePicker" class="ui-theme-picker"></div>
+      </div>
+      <h2 class="settings-section-heading">Heatmap Color</h2>
+      <div class="modal-field">
+        <div id="palettePicker" class="palette-picker"></div>
+      </div>
+      </details>
+
+      <details class="settings-details" open>
+      <summary class="settings-section-heading">Sound</summary>
+      <div class="modal-field">
+        <label for="soundSelect">Alert sound</label>
+        <div class="sound-modal-row">
+          <select id="soundSelect" aria-label="Choose alert sound">
+            <option value="simple">Simple tone</option>
+            <option value="bell">Bell</option>
+            <option value="chime" selected>Chime</option>
+            <option value="off">Off</option>
+          </select>
+          <button id="previewSoundBtn" class="ghost-btn icon-btn" type="button" aria-label="Preview selected sound" title="Preview sound">🔊</button>
+        </div>
+      </div>
+      </details>
+
+      <details class="settings-details" open>
+      <summary class="settings-section-heading">Notifications</summary>
+      <div class="modal-field">
+        <label class="toggle-row" for="notificationsToggle">
+          <span>Desktop notification when a session ends</span>
+          <input id="notificationsToggle" type="checkbox" checked />
+        </label>
+        <label class="toggle-row" for="deadlineRemindersToggle">
+          <span>Remind me about task deadlines (due today, tomorrow, overdue)</span>
+          <input id="deadlineRemindersToggle" type="checkbox" checked />
+        </label>
+        <div class="sound-modal-row">
+          <button id="testNotificationBtn" class="ghost-btn" type="button">Send test notification</button>
+          <span id="testNotificationStatus" class="settings-sub-label" role="status"></span>
+        </div>
+      </div>
+      </details>
+
+      <details class="settings-details">
+        <summary class="settings-section-heading">Keyboard shortcuts</summary>
+        <dl class="shortcut-list"></dl>
+      </details>
+
+      <details class="settings-details" id="privacySettings" hidden>
+      <summary class="settings-section-heading">Privacy</summary>
+      <div class="modal-field">
+        <label class="toggle-row" for="telemetryToggle">
+          <span>Share anonymous usage data to help focus research</span>
+          <input id="telemetryToggle" type="checkbox" />
+        </label>
+        <p class="settings-sub-label">Once a day the app sends which features are on and your focus minutes (rounded), tied to a random ID. Never task text, names or your IP address.</p>
+        <div class="sound-modal-row">
+          <button id="telemetryViewBtn" class="ghost-btn" type="button">View what's shared</button>
+          <a id="telemetryPolicyLink" class="settings-sub-label" href="#">Privacy policy</a>
+        </div>
+        <pre id="telemetryPreview" class="settings-sub-label" hidden></pre>
+        <p id="telemetryIdLine" class="settings-sub-label" hidden></p>
+      </div>
+      </details>
+
+      <h2 class="settings-section-heading">Other</h2>
+      <div class="modal-field" id="alwaysOnTopRow">
+        <label class="toggle-row" for="alwaysOnTopToggle" id="windowSettingsHeading">
+          <span>Always on top (in compact mode)</span>
+          <input id="alwaysOnTopToggle" type="checkbox" checked />
+        </label>
+      </div>
+      <div class="modal-field" id="launchAtLoginRow" hidden>
+        <label class="toggle-row" for="launchAtLoginToggle">
+          <span>Start with Windows (minimized to tray)</span>
+          <input id="launchAtLoginToggle" type="checkbox" />
+        </label>
+      </div>
+      <div class="modal-field" id="updateRow" hidden>
+        <span class="settings-sub-label">App updates</span>
+        <div class="sound-modal-row">
+          <button id="updateBtn" class="ghost-btn" type="button">🔄 Check for updates</button>
+          <span id="updateStatus" class="settings-sub-label" role="status"></span>
+        </div>
+      </div>
+      <div class="modal-field">
+        <span class="settings-sub-label">Back up or restore your tasks, history, and settings</span>
+        <div class="sound-modal-row">
+          <button id="exportDataBtn" class="ghost-btn" type="button">⬇️ Export data</button>
+          <button id="importDataBtn" class="ghost-btn" type="button">⬆️ Import data</button>
+          <input id="importDataInput" type="file" accept="application/json" hidden />
+        </div>
+        <p id="importErrorMsg" class="import-error-msg hidden"></p>
+      </div>
+      <div class="modal-field">
+        <span class="settings-sub-label">Permanently delete all tasks, activity log, and settings</span>
+        <div class="sound-modal-row">
+          <button id="clearAllDataBtn" class="btn danger clear-data-btn" type="button">🗑️ Clear all data</button>
+        </div>
+      </div>
+      <div class="modal-field">
+        <span class="settings-sub-label">Enjoying the app? Help support its development</span>
+        <div class="sound-modal-row">
+          <a id="supportKofiBtn" class="ghost-btn" data-kofi href="https://ko-fi.com/saeedab" target="_blank" rel="noopener noreferrer">☕ Support me on Ko-fi</a>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="doneSettingsBtn" class="btn primary" type="button">Done</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="shortcutsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="modal-content">
+      <button id="closeShortcutsBtn" class="modal-close-btn" aria-label="Close">✕</button>
+      <h2 id="shortcutsTitle">Keyboard shortcuts</h2>
+      <dl class="shortcut-list"></dl>
+    </div>
+  </div>
+
+  <div id="importOptionsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="importOptionsTitle">
+    <div class="modal-content">
+      <button id="closeImportOptionsBtn" class="modal-close-btn" aria-label="Close">✕</button>
+      <h2 id="importOptionsTitle">Import Options</h2>
+      <p class="import-intro">Choose what to do with each part of the backup:</p>
+
+      <div class="import-section">
+        <h3 class="settings-section-heading" style="margin-top:0">Focus History</h3>
+        <label class="import-radio-row"><input type="radio" name="historyMode" value="skip" checked> Only fill in days with no existing data</label>
+        <label class="import-radio-row"><input type="radio" name="historyMode" value="replace"> Replace all history</label>
+        <label class="import-radio-row"><input type="radio" name="historyMode" value="none"> Don't import history</label>
+      </div>
+
+      <div class="import-section">
+        <h3 class="settings-section-heading">Tasks</h3>
+        <label class="import-radio-row"><input type="radio" name="tasksMode" value="add" checked> Add to existing tasks</label>
+        <label class="import-radio-row"><input type="radio" name="tasksMode" value="replace"> Replace all tasks</label>
+        <label class="import-radio-row"><input type="radio" name="tasksMode" value="none"> Don't import tasks</label>
+      </div>
+
+      <div class="modal-actions">
+        <button id="cancelImportBtn" class="btn secondary" type="button">Cancel</button>
+        <button id="confirmImportBtn" class="btn primary" type="button">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="clearDataModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="clearDataTitle">
+    <div class="modal-content">
+      <button id="closeClearDataBtn" class="modal-close-btn" aria-label="Close">✕</button>
+      <h2 id="clearDataTitle">⚠️ Clear All Data</h2>
+      <p class="clear-data-warning">Are you sure you want to delete all data? This will permanently remove:</p>
+      <ul class="clear-data-list">
+        <li>All tasks and subtasks</li>
+        <li>All activity log entries and focus history</li>
+        <li>All settings (appearance, sound, background)</li>
+      </ul>
+      <p class="clear-data-warning clear-data-irreversible">This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button id="cancelClearDataBtn" class="btn secondary" type="button">Cancel</button>
+        <button id="confirmClearDataBtn" class="btn danger" type="button">Yes, delete everything</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="telemetryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="telemetryModalTitle">
+    <div class="modal-content">
+      <h2 id="telemetryModalTitle">Help improve focus research</h2>
+      <p id="telemetryModalText" class="clear-data-warning"></p>
+      <ul class="clear-data-list">
+        <li>Shared once a day: which features are on and your focus minutes (rounded)</li>
+        <li>Tied to a random ID you can reset at any time</li>
+        <li>Never your tasks, name, device or IP address</li>
+      </ul>
+      <p class="clear-data-warning">You can change this any time in Settings &gt; Privacy. <a id="telemetryModalPolicy" href="#">Privacy policy</a></p>
+      <div class="modal-actions">
+        <button id="telemetryDeclineBtn" class="btn secondary" type="button"></button>
+        <button id="telemetryAcceptBtn" class="btn primary" type="button"></button>
+      </div>
+    </div>
+  </div>
+
+  <button id="panelVisibilityToggle" class="panel-visibility-toggle" type="button" aria-label="Hide panels" aria-pressed="false" title="Hide panels">
+    <span class="vis-icon vis-icon-eye" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3.25"/></svg>
+    </span>
+    <span class="vis-icon vis-icon-eye-off" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M3 3l18 18"/><path d="M10.58 10.58A2 2 0 0 0 12 14a2 2 0 0 0 1.42-.58"/><path d="M9.88 5.09A11.6 11.6 0 0 1 12 5c6.4 0 10 7 10 7a16.8 16.8 0 0 1-4 4.77"/><path d="M6.1 6.1C3.56 7.58 2 10 2 10s3.6 7 10 7c1.34 0 2.56-.27 3.66-.72"/></svg>
+    </span>
+  </button>
+
+  <div id="ghTooltip" class="gh-tooltip"></div>
+  <script src="script.js"></script>
+</body>
+</html>

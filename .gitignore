@@ -1,0 +1,15 @@
+Next step.md
+node_modules/
+release/
+release*/
+release4/
+release5/
+Exported Data from Pomodoro logger app.json
+imported-history.json
+Help (html-structure).md
+Icons.pptx
+# Personal / local-only
+Temp*.json
+.claude/
+*.pptx
+release*/
