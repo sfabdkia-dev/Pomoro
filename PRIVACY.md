@@ -1,7 +1,5 @@
 # Pomoro Privacy Policy
 
-DRAFT: have this reviewed (and your ethics board, if applicable) before publishing it at a public URL and entering that URL in Partner Center and `telemetry.js`.
-
 ## What stays on your device
 Your tasks, activity log, settings and focus history are stored locally on your computer. They are never uploaded.
 
@@ -27,10 +25,10 @@ Task names or text, log entries, your name, email, device name, files, exact tim
 Data is sent over HTTPS to PostHog's EU cloud (Frankfurt, Germany) and used only for research on focus and productivity tools. Results are published only in aggregate.
 
 ### Opting out and deletion
-Turning sharing off stops all sending and deletes your ID from your device. To ask for data already sent to be deleted, send your ID (shown in Settings > Privacy while sharing is on) to [CONTACT EMAIL]. If you turn sharing off and on again, you get a new ID that is not linked to the earlier data.
+Turning sharing off stops all sending and deletes your ID from your device. To ask for data already sent to be deleted, send your ID (shown in Settings > Privacy while sharing is on) to sfabdkia@gmail.com . If you turn sharing off and on again, you get a new ID that is not linked to the earlier data.
 
 ### Retention
-[Decide and state a retention period, for example 24 months.]
+The data is only collected and saved for research purposes, mainly, with the aim of helping users focus on their activities. 
 
 ## Contact
-[CONTACT EMAIL]
+sfabdkia@gmail.com
