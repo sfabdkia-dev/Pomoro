@@ -6,9 +6,9 @@ const { app, net } = require('electron');
 
 // TODO(author): fill in before release. The project key is write-only and safe to ship.
 const POSTHOG_HOST = 'https://eu.i.posthog.com';
-const POSTHOG_KEY = 'phc_REPLACE_WITH_PROJECT_KEY';
-// TODO(author): replace with the public URL of PRIVACY.md (also entered in Partner Center).
-const PRIVACY_URL = 'https://example.com/pomoro/privacy';
+const POSTHOG_KEY = 'phc_rkPZsiebYpzW8dmZc82kwcsMW8jsfLUxWorhUyp7TbWG';
+// Public URL of docs/privacy.md; also entered in Partner Center.
+const PRIVACY_URL = 'https://github.com/sfabdkia-dev/Pomoro/blob/main/docs/privacy.md';
 
 // EU + EEA + UK + Switzerland. Telemetry is opt-in here (off until accepted).
 const STRICT_REGIONS = new Set([

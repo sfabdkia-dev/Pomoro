@@ -59,7 +59,7 @@ Web Audio API only — no audio files. `playAlert()` synthesizes tones using osc
 - Renderer (`script.js`, "Anonymous research telemetry" block): `buildDailySummary()`, `maybeSendTelemetry()` (startup + every 60s), consent modal `showTelemetryNotice()`, Settings > Privacy section. Main (`telemetry.js`): validates the payload, holds the PostHog key/host and `PRIVACY_URL`, decides the region policy; IPC `telemetry-get-info` / `telemetry-send`.
 - Consent lives in localStorage `telemetryState` and the random UUID in `telemetryId`; both are deliberately outside `BACKUP_KEYS`. Opting out (or Clear all data) calls `clearTelemetryId()`; there is intentionally no separate "reset ID" button.
 - Region policy: EU/EEA/UK/CH or unknown region -> opt-in; elsewhere on by default behind the first-run notice. `POMORO_TELEMETRY_REGION=DE npm start` forces a region for testing.
-- Anything added to the payload must be coarse, free of user text, and listed in `PRIVACY.md`.
+- Anything added to the payload must be coarse, free of user text, and listed in `docs/privacy.md` (published at https://sfabdkia-dev.github.io/Pomoro/privacy/).
 
 ### Background Images
 

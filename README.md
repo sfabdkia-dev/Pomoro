@@ -16,7 +16,7 @@ A single-page focus timer built with vanilla JavaScript, HTML, and CSS — no fr
 
 ## Privacy and research data
 
-The desktop app can share anonymous usage data to support research on what helps people focus. It is opt-in in the EU/EEA/UK/Switzerland (and where the region is unknown) and on by default elsewhere, behind a first-run notice. It can be turned off any time in Settings > Privacy, which also deletes the random ID. See [PRIVACY.md](PRIVACY.md) for exactly what is collected. The browser build never sends anything.
+The desktop app can share anonymous usage data to support research on what helps people focus. It is opt-in in the EU/EEA/UK/Switzerland (and where the region is unknown) and on by default elsewhere, behind a first-run notice. It can be turned off any time in Settings > Privacy, which also deletes the random ID. See [docs/privacy.md](docs/privacy.md) for exactly what is collected. The browser build never sends anything.
 
 ## Running
 

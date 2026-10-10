@@ -1,6 +1,11 @@
+---
+title: Pomoro Privacy Policy
+permalink: /privacy/
+---
+
 # Pomoro Privacy Policy
 
-DRAFT: have this reviewed (and your ethics board, if applicable) before publishing it at a public URL and entering that URL in Partner Center and `telemetry.js`.
+DRAFT: have this reviewed (and your ethics board, if applicable) before publishing. Remove this line and fill in the bracketed placeholders first.
 
 ## What stays on your device
 Your tasks, activity log, settings and focus history are stored locally on your computer. They are never uploaded.
